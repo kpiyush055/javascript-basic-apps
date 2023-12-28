@@ -142,8 +142,9 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id);
 }
+/*
 //Destructuring Objects
-const book = getBook(2);
+const book = getBook(1);
 // const title = book.title;
 // const auth = book.author;
 
@@ -206,8 +207,81 @@ console.log(defaultValue);
 
 console.log(book.reviews.librarything.reviewsCount)
 const ct = book.reviews.librarything.reviewsCount || "No data";
-ct;// here it should be 0 but its returning no data. Its not treating 0 as a value. So solve this problem javascript as introduced ;
+// ct;// here it should be 0 but its returning no data. Its not treating 0 as a value. So solve this problem javascript has introduced coalescing operator ;
+
+const count = book.reviews.librarything.reviewsCount ?? "No data";
+console.log(count);
+
+//Optional chaining use ?. and ?? together
+function getTotalReviewCount(book){
+  const goodRead = book.reviews?.goodreads?.reviewsCount ?? 0;
+  const librarything = book.reviews?.librarything?.reviewsCount ?? 0;
+  return goodRead + librarything;
+  
+}
+console.log(getTotalReviewCount(book)); //for id-3 it will give Nan instaed of giving */
+
+//Array methods
+const books = getBooks();
+const x = [1,2,3,4,5].map((el) => el*2); 
+console.log(x);
+
+const onlyTitles = books.map((book) => book.title );
+console.log(onlyTitles)
+
+// const eseentialData = books.map((book) => {
+//   return {
+//     title: book.title,
+//     author: book.author
+//   }
+// });
+const eseentialData = books.map((book) => 
+({
+    title: book.title,
+    author: book.author
+  }
+));
+eseentialData;
+
+const longBooks = books.filter((book) => book.pages > 500).filter((book) => book.hasMovieAdaptation) ;
+longBooks;
+
+const adventureBooks = books.filter((book) => book.genres.includes('adventure'));
+const titlesForAdv = adventureBooks.map(book=>book.title);
+console.log(titlesForAdv);
+console.log(adventureBooks);
+
+const totalPagesAllBooks = books.reduce((acc, book) =>  acc + book.pages, 0)
+totalPagesAllBooks;
+
+const arr = [5,6,3,9,8];
+//const sortedAccending = arr.sort((a,b) => a - b);
+
+const sortedAccending = arr.slice().sort((a,b) => a - b);
+sortedAccending;
+arr;
+const sortedDeccending = arr.sort((a,b) => b - a);
+sortedDeccending;
+arr; // You can notice that the original array is changed by this methods. So use slice here to make acopy of the original arr to perform operations on it.
+
+const sortedByPages = books.slice().sort((a,b) => a.pages - b.pages);
+sortedByPages;
 
 
+//1.Add new book to array
+const newBook = {
+  id: 6,
+  title : "Harry Potter and The Half Blood Prince",
+  author : "J K Rowling"
+}
 
+const updatedBooks = [...books, newBook];
+updatedBooks
 
+//2. Delete book object from array
+const booksAfterDelete = updatedBooks.filter((book) => book.id !== 3);
+booksAfterDelete;
+
+//3. Update a book object in the array  and use of spread operator wisely:)
+ const booksAfterUpdate = booksAfterDelete.map((book) => book.id === 6 ? {...book, pages:112} : book);
+ booksAfterUpdate;
